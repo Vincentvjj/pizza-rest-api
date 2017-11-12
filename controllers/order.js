@@ -49,6 +49,9 @@ exports.postOrder = function(req, res) {
 	});
 };
 
+/**
+* GET /v1/order
+*/
 exports.getAllOrder = function(req, res) {
 	db.getAllOrder().then(function(data) {
 		var idArray = [];
@@ -61,5 +64,37 @@ exports.getAllOrder = function(req, res) {
 			console.log("GET ALL ORDER: " + JSON.stringify(data));
 			return res.send(idArray);
 		}
+	});
+};
+
+/**
+* GET /v1/order/:orderId
+*/
+exports.getOrderById = function(req, res) {
+	var orderId = parseInt(req.params.orderId);
+	if(isNaN(orderId)) {
+		return res.status(400).send({message : "Invalid input"});
+	}
+	db.getOrderById(orderId).then(function(data) {
+		console.log("GET ORDER BY ID: " + data);
+		return res.send(data);
+	}).catch(function(err) {
+		return res.status(404).send({message: err});
+	});
+};
+
+/**
+* DELETE /v1/order/:orderId
+*/
+exports.deleteOrder = function(req, res) {
+	var orderId = parseInt(req.params.orderId);
+	if(isNaN(orderId)) {
+		return res.status(400).send({message : "Invalid ID Supplied"});
+	}
+	db.deleteOrder(orderId).then(function(data) {
+		console.log("DELETE ORDER ID: " + orderId);
+		return res.status(204).send("Successful deletion");
+	}).catch(function(err) {
+		return res.status(404).send({message: err});
 	});
 };

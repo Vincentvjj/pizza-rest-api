@@ -155,5 +155,28 @@ exports.getAllOrder = function() {
 	return new Promise(function(resolve, reject) {
 		resolve(db.orders);	
 	});
-}
+};
+
+exports.getOrderById = function(orderId) {
+	return new Promise(function(resolve, reject) {
+		if(db.orders[orderId]) {
+			resolve(db.orders[orderId]);
+		} else {
+			reject("Order not found");
+		}
+
+	});
+};
+
+exports.deleteOrder = function(orderId) {
+	return new Promise(function(resolve, reject) {
+		exports.getOrderById(orderId).then(function(data){
+			delete db.orders[orderId];
+			resolve();
+		}).catch(function(err) {
+			reject(err);
+		});
+	});
+};
+
 

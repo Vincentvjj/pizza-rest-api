@@ -32,7 +32,8 @@ app.delete('/v1/pizza/:pizzaId/topping/:toppingId', toppingController.deleteTopp
 // Routings Orders
 app.post('/v1/order', orderController.postOrder);
 app.get('/v1/order', orderController.getAllOrder);
-
+app.get('/v1/order/:orderId', orderController.getOrderById);
+app.delete('/v1/order/:orderId', orderController.deleteOrder);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
