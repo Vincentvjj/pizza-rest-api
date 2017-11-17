@@ -32,10 +32,12 @@ exports.getPizzaById = function(id) {
 exports.updatePizza = function(id, name, size, price) {
 	return new Promise(function(resolve, reject) {
 		exports.getPizzaById(id).then(function(data){
-			var newPrice = data.price - pizza.checkPrice(data.size) + price;
-			db.pizzas[id].name = name;
-			db.pizzas[id].size = size;
-			db.pizzas[id].price = newPrice;
+			if(price) {
+				var newPrice = data.price - pizza.checkPrice(data.size) + price;
+				db.pizzas[id].price = newPrice;
+			}
+			if(name) {db.pizzas[id].name = name;}
+			if(size) {db.pizzas[id].size = size;}
 			resolve();
 		}).catch(function(err) {
 			reject(err);

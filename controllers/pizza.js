@@ -54,11 +54,10 @@ exports.updatePizza = function(req, res) {
 	}
 	var name = req.body.name;
 	var size = req.body.size;
-	var price = exports.checkPrice(size);
-
-	if(price === -1) {
-		return res.status(400).send({message : "Invalid pizza supplied"});
-	}
+  	var price = exports.checkPrice(size);
+  	if(price === -1) {
+		return res.status(400).send({message : "Invalid Pizza supplied"});
+  	}
 
 	db.updatePizza(id, name, size, price).then(function(){
 		console.log("UPDATED PIZZA ID: " + id);
@@ -112,7 +111,9 @@ exports.postPizza = function(req, res, next) {
 
 ////////// Helper methods //////////////////
 exports.checkPrice = function(size) {
-	if(size.toLowerCase() === "standard") {
+	if (size == undefined) {
+		return undefined;
+	} else if(size.toLowerCase() === "standard") {
 		return 5.00;
 	} else if(size.toLowerCase() === "large") {
 		return 8.50;

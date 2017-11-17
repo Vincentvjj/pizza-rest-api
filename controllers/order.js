@@ -20,7 +20,7 @@ exports.postOrder = function(req, res) {
 		var quantity = parseInt(orderItems[i].quantity);
 
 		// first check if there are these properties, and then if these properties are good values.
-		if(isNaN(pizzaId) || isNaN(quantity)) {
+		if(isNaN(pizzaId) || isNaN(quantity) || quantity < 0) {
 			return res.status(400).send({message: "invalid order"});
 		} else {	
 			// use the Parse Int'ed values
