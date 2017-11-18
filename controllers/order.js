@@ -1,3 +1,5 @@
+// this is the controller for the order related functions
+
 var db = require('../models/db');
 
 /**
@@ -39,7 +41,7 @@ exports.postOrder = function(req, res) {
 			totalPrice += data[i].price * reqOrderItems[i].quantity;
 		}
 		db.postOrder(reqOrderItems, recipient, totalPrice).then(function(data) {
-			var location = req.protocol + "://" + req.get('host') + req.originalUrl + "/" + data;
+			var location = req.protocol + "://" + req.get('host') + req.originalUrl + data;
 			console.log("CREATED ORDER ID: " + data);
 			res.setHeader('location', location);
 			res.status(201).send("Created new order successfully");

@@ -1,3 +1,5 @@
+// this is the controller for the pizza related functions
+
 var db = require('../models/db');
 
 /**
@@ -55,7 +57,7 @@ exports.updatePizza = function(req, res) {
 	var name = req.body.name;
 	var size = req.body.size;
   	var price = exports.checkPrice(size);
-  	if(price === -1) {
+  	if(price === -1 || (name != undefined && typeof name !== "string") || (size != undefined && typeof size !== "string")) {
 		return res.status(400).send({message : "Invalid Pizza supplied"});
   	}
 
@@ -65,7 +67,7 @@ exports.updatePizza = function(req, res) {
 	}).catch(function(err) {
 		console.log(err);
 		return res.status(404).send({message : err});
-	})
+	});
 };
 
 /**
@@ -84,7 +86,7 @@ exports.deletePizza = function(req, res) {
 	}).catch(function(err) {
 		console.log(err);
 		return res.status(404).send({message: err});
-	})
+	});
 };
 
 /**
@@ -95,12 +97,12 @@ exports.postPizza = function(req, res, next) {
 	var size = req.body.size;
 	var price = exports.checkPrice(size);
 
-	if(price === -1) {
+	if(price === -1 || price == undefined || name == undefined || typeof name !== "string") {
 		return res.status(400).send({message : "Invalid Pizza"});
 	}
 
 	db.insertPizza(name, size, price).then(function(data) {
-		var location = req.protocol + "://" + req.get('host') + req.originalUrl + "/" + data;
+		var location = req.protocol + "://" + req.get('host') + req.originalUrl + data;
 		console.log("CREATED PIZZA: " + location);
 		res.setHeader('location', location);
 		return res.status(201).json({message: "Created new pizza"});
@@ -111,7 +113,7 @@ exports.postPizza = function(req, res, next) {
 
 ////////// Helper methods //////////////////
 exports.checkPrice = function(size) {
-	if (size == undefined) {
+	if (size == undefined || typeof size !== "string") {
 		return undefined;
 	} else if(size.toLowerCase() === "standard") {
 		return 5.00;
@@ -120,5 +122,4 @@ exports.checkPrice = function(size) {
 	} else {
 		return -1;
 	}
-}
-
+};

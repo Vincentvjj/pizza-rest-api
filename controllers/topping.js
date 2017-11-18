@@ -1,3 +1,5 @@
+// this is the controller for the topping related functions
+
 var db = require('../models/db');
 
 /**
@@ -8,12 +10,13 @@ exports.postTopping = function(req, res) {
 	var price = parseFloat(req.body.price);
 	var pizzaId = parseInt(req.params.pizzaId);
 
-	if(isNaN(pizzaId) || isNaN(price)) {
+	// checks if pizzaId is int, if price is alsot int, name is not blank, and name is a string.
+	if(isNaN(pizzaId) || isNaN(price) || name == undefined || typeof name !== "string") {
 		return res.status(400).send({message : "Invalid input"});
 	}
 
 	db.insertTopping(pizzaId, name, price).then(function(data) {
-		var location = req.protocol + "://" + req.get('host') + req.originalUrl + "/" + data;
+		var location = req.protocol + "://" + req.get('host') + req.originalUrl + data;
 		console.log("CREATED TOPPING ID: " + location);
 		res.setHeader('location', location);
 		return res.status(201).json({message: "Created new topping for pizza"});
